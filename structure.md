@@ -12,12 +12,24 @@
 
 https://documentation.divio.com/
 
-FFS = Framework Flight Software
+FFS = Framework Flight Software\
 MFS = Mission Flight Software  
 
 ## Files
 
 - .hpp files, .cpp files and documentation files are alongside each other
+
+## FFS
+
+The FFS is an abstraction layer. Here are its objectives :
+
+- Make mission software development simple and reliable
+- Simple C++ API
+- Seamless communication between software components and between hardware components 
+
+## MFS
+
+The MFS is the main mission software.
 
 ## FFS Folder structure
     
@@ -30,7 +42,7 @@ MFS = Mission Flight Software
 |- config/                      ||
 |- bin/                         |build output|
 |- doc/                         ||
-|----- [introduction]           ||                
+|----- [intro]                  ||                
 |----- tutorials/               ||
 |----- how-to/                  ||
 |----- design/                  |explanation of why we made the choices|
@@ -38,18 +50,13 @@ MFS = Mission Flight Software
 |- src/                         |unit tests alongside the sources !!|
 |----- deps/                    |code dependencies and libraries|
 |---------- freeRTOS/           ||
-|---------- ...                 ||
-|----- mission/                 |mission logic|
-|---------- init/               ||
-|---------- datahandling/       ||
-|---------- flightplan/         ||
-|---------- attitudectl/        ||
-|---------- orbitctl/           ||
-|---------- pwrctl/             |subsystem on/off, housekeeping|
 |----- core/                    |C-to-C++ interface, simplify everything. publisher/subscriber-based messaging protocol.|
-|----- compat/                  |common hardware interface definition|
-|----- boot/                    |bootloader|
-|----- archs/                   |platform-specific code (HALs and drivers from vendor = BSP board support package)|
+|---------- module/             ||
+|--------------- local/         |Software module -> has an event loop|
+|--------------- remote/        |Hardware module -> has send/receive functions|
+|---------- message/            ||
+|---------- task/               ||
+
 
 
 
@@ -65,15 +72,22 @@ MFS = Mission Flight Software
 |- bin/                         |build output|
 |- src/                         |unit tests alongside the sources !!|
 |----- deps/                    |code dependencies and libraries|
-|---------- LFS/                ||
+|---------- FFS/                |Framework Flight Software|
 |---------- AX25/               ||
 |---------- CCSDS-PUS/          ||
+|---------- .../                ||
 |----- mission/                 |mission logic|
-|---------- init/               ||
-|---------- datahandling/       ||
-|---------- flightplan/         ||
-|---------- attitudectl/        ||
-|---------- orbitctl/           ||
-|---------- pwrctl/             |subsystem on/off, housekeeping|
-|----- subsystems/              |subsystems abstraction interface|
-|----- arch/                    |platform-specific code (HALs and drivers from vendor = BSP board support package)|
+|---------- supervisor/         |supervisor|
+|---------- init/               |initialization|
+|---------- datahandling/       |data handling|
+|---------- flightplan/         |flight plan|
+|---------- attitudectl/        |attitude control algorithms|
+|---------- orbitctl/           |orbit control algorithms|
+|---------- pwrctl/             |monitoring and subsystem on/off depending on modes|
+|----- modules/                 |modules abstraction interface|
+|---------- tmtc/               |telemeasure / telecommunications|
+|---------- eps/                |elec power unit|
+|---------- adcs/               |attitude determination + control system|
+|---------- ocs/                |orbit control system|
+|----- arch/                    |BSP = board support package|
+|----- boot/                    |bootloader|
