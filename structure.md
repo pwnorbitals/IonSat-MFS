@@ -12,6 +12,10 @@
 
 https://documentation.divio.com/
 
+## Files
+
+- .hpp files, .cpp files and documentation files are alongside each other
+
 ## Folder structure
     
 | Folder | Explanation |
