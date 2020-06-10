@@ -5,7 +5,7 @@
 - Features
     - clock synchronization 
     - on-orbit patching
-    - 
+    - EDF scheduling, opt-in
 - Constraints
     - environnement
         - real time
