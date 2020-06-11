@@ -5,5 +5,5 @@ namespace FFS {
 }
 
 int main() {
-    iotest();
+    FFS::iotest();
 }

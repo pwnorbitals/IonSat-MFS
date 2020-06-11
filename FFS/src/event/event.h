@@ -24,9 +24,9 @@ namespace FFS {
 
         public:
             Event();
-            ~Event();
+            virtual ~Event();
 
-            EventStruct getData();
+            EventDataStruct getData();
             static void parseBuffer(char* buf);
             char* serialize();
     };

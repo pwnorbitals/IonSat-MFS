@@ -13,7 +13,7 @@ namespace FFS {
 
         public:
             RemoteModule();
-            ~RemoteModule();
+            virtual ~RemoteModule();
 
             virtual void recvData() = 0;
             virtual void sendData(char* buf, unsigned int inlen) = 0;

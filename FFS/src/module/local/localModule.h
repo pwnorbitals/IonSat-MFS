@@ -7,7 +7,7 @@ namespace FFS {
 
         public:
             LocalModule();
-            ~LocalModule();
+            virtual ~LocalModule();
     };
 }
 

@@ -1,4 +1,4 @@
-#include "controller.h"
+#include "FFS.h"
 
 namespace FFS {
     void addEventType(unsigned int identifier, std::string name) {
@@ -8,7 +8,7 @@ namespace FFS {
 
     void Controller::addEventType(unsigned int identifier, std::string name) {
         
-    }
+    };
 
     void addMode() {
 
@@ -16,7 +16,7 @@ namespace FFS {
 
     void Controller::addMode() {
 
-    }
+    };
 
     void emit(FFS::Event evt) {
 
@@ -24,7 +24,7 @@ namespace FFS {
 
     void Controller::emit(FFS::Event evt) {
 
-    }
+    };
 
     void start() {
 
@@ -32,7 +32,7 @@ namespace FFS {
 
     void Controller::start() {
 
-    }
+    };
 
     Controller::Controller() {
 

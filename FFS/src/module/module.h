@@ -11,7 +11,7 @@ namespace FFS {
 
         public:
             Module();
-            ~Module();
+            virtual ~Module();
             
 
     };

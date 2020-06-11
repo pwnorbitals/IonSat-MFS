@@ -38,11 +38,8 @@ int main() {
 
     auto consoleEvent = FFS::addEventType(0x01, "consoleEvent");
 
-    FFS::LocalModule TestModule();
+    auto TestModule = FFS::LocalModule{};
     TestModule.addHandler(consoleEvent, consoleEvtHdlr);
 
-    FFS::start();
-
-    // Should never reach
-    return 0;
+    return FFS::start();
 }
