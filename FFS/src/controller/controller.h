@@ -5,6 +5,9 @@
 #include <tuple>
 #include <memory>
 
+#include "module/module.h"
+#include "mode/mode.h"
+
 namespace FFS {
 
     void addEventType();
