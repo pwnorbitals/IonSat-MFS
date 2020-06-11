@@ -13,7 +13,7 @@ namespace FFS {
             strncat(this->inBuf, buf, inlen);    // Needs test too anyway
         }
 
-        FFS::Event::ParseBuffer(inBuf);
+        FFS::Event::parseBuffer(inBuf);
 
     }; 
 }

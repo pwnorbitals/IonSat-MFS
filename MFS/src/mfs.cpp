@@ -3,11 +3,19 @@
 #include <functional>
 #include "FFS.h"
 
+
+FFS::EventType<char[512]> consoleEvent;
+
+
+auto eventTypes = std::list<FFS::EventType> {
+    consoleEvent
+};
+
 void cinFct(std::function<void(char*)> recvData) {
     auto input = std::string{};
     while(true) {
         std::cin >> input;
-        FFS::Event inputEvent(input.c_str());
+        FFS::Event inputEvent(ConsoleEvent, input.c_str());
         recvData(inputEvent.serialize()); 
     }
 }
@@ -29,17 +37,17 @@ class ConsoleModule : public FFS::RemoteModule {
 };
 
 void consoleEvtHdlr (FFS::Event evt) {
-    std::cout << "EVENT RECEIVED : " << evt.getData().packet.data << std::endl;
+    std::cout << "EVENT RECEIVED : " << evt.getData().data << std::endl;
 }
 
 int main() {
     std::cout << "test" << std::endl;
     FFS::iotest();
 
-    auto consoleEvent = FFS::addEventType(0x01, "consoleEvent");
+    auto testModule = FFS::ConsoleModule{};
+    testModule.addHandler(eventType::consoleEvent, consoleEvtHdlr);
 
-    auto TestModule = FFS::LocalModule{};
-    TestModule.addHandler(consoleEvent, consoleEvtHdlr);
+    FFS::start();
 
-    return FFS::start();
+    return 0;
 }

@@ -12,7 +12,8 @@ namespace FFS {
 
     void addEventType();
     void addMode();
-    void emit(FFS::Event evt);
+    template<typename T>
+    void emit(FFS::Event<T> evt);
     void start();
 
     // Singleton class
@@ -21,7 +22,7 @@ namespace FFS {
         protected:
             static Controller& instance;
 
-            std::list<std::tuple<std::unique_ptr<FFS::Module>, FFS::MessageType>> subscribed;
+            std::list<std::tuple<std::unique_ptr<FFS::Module>, FFS::eventType>> subscribed;
             FFS::Task dispatcher;
             std::list<std::unique_ptr<FFS::Module>> modules;
             std::list<FFS::Mode> modes;
@@ -31,7 +32,6 @@ namespace FFS {
             Controller();
             virtual ~Controller();
             Controller& operator()();
-            void addEventType();
             void addMode();
             void emit(FFS::Event);
             void start();

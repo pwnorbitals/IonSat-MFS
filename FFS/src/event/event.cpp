@@ -1,20 +1,28 @@
 #include "FFS.h"
 
 namespace FFS {
-    Event::Event() {};
+    template<typename T>
+    Event<T>::startMarker{"FS"};
 
-    Event::~Event() {};
+    template<typename T>
+    Event<T>::Event() {};
 
-    EventDataStruct Event::getData() { 
+    template<typename T>
+    Event<T>::~Event() {};
+
+    template<typename T>
+    EventDataStruct Event<T>::getData() { 
         return data;
     };
 
-    void Event::parseBuffer(char* buf) {
+    template<typename T>
+    void Event<T>::parseBuffer(char* buf) {
 
-        FFS::emit();
+        emit();
     }
 
-    char* serialize() {
+    template<typename T>
+    char* Event<T>::serialize() {
                 
     }
 }
