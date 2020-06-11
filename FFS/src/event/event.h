@@ -4,7 +4,7 @@
 namespace FFS {
     typedef unsigned int MessageType;
 
-    struct EventPacketStruct {
+    struct EventDataStruct {
         unsigned int msg_class;
         unsigned int msg_type;
         char sender_name[64];
@@ -15,27 +15,20 @@ namespace FFS {
         unsigned short start;
         unsigned int length;
         char md5[32];
-        EventPacketStruct packet;
+        EventDataStruct packet;
     };
 
     class Event {
         protected:
-            EventStruct data;
+            EventDataStruct data;
 
         public:
-            Event() {};
-            ~Event() {};
+            Event();
+            ~Event();
 
-            EventStruct getData() { return data; };
-
-            static void parseBuffer(char* buf) {
-
-                FFS::emit();
-            }
-
-            char* serialize() {
-                
-            }
+            EventStruct getData();
+            static void parseBuffer(char* buf);
+            char* serialize();
     };
 }
 

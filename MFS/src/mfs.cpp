@@ -3,13 +3,14 @@
 #include <functional>
 #include "FFS.h"
 
-void cinFct(std::function recvData) {
-    std::string input;
-    std::cin >> input;
-
-    recvData(input.c_str());
+void cinFct(std::function<void(char*)> recvData) {
+    auto input = std::string{};
+    while(true) {
+        std::cin >> input;
+        FFS::Event inputEvent(input.c_str());
+        recvData(inputEvent.serialize()); 
+    }
 }
-
 
 class ConsoleModule : public FFS::RemoteModule {
     public:
@@ -18,8 +19,8 @@ class ConsoleModule : public FFS::RemoteModule {
         ConsoleModule() : RemoteModule{}, cinThread{cinFct, recvData} {}
 
     protected:
-        void recvData(char* buf) {
-            this->addIncoming(buf);
+        void recvData(char* buf, unsigned int len) {
+            this->addIncoming(buf, len);
         }
 
         void sendData(char* buf) {
@@ -27,18 +28,21 @@ class ConsoleModule : public FFS::RemoteModule {
         }
 };
 
-void testEvtHdlr (FFS::Event evt) {
-    std::cout << evt.getData().packet.data << std::endl;
+void consoleEvtHdlr (FFS::Event evt) {
+    std::cout << "EVENT RECEIVED : " << evt.getData().packet.data << std::endl;
 }
 
 int main() {
     std::cout << "test" << std::endl;
     FFS::iotest();
 
-    testEvent = FFS::addEventType(0x01, "testEvent");
+    auto consoleEvent = FFS::addEventType(0x01, "consoleEvent");
 
     FFS::LocalModule TestModule();
-    TestModule.addHandler(testEvent, )
+    TestModule.addHandler(consoleEvent, consoleEvtHdlr);
 
+    FFS::start();
+
+    // Should never reach
     return 0;
 }

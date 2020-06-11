@@ -5,7 +5,13 @@
 #include "task.h"
 
 namespace FFS {
-    
+    class Task {
+
+    };
+
+    class Semaphore {
+
+    };
 }
 
 #endif

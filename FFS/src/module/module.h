@@ -10,8 +10,8 @@ namespace FFS {
             virtual void sendEvent(FFS::Event) = 0;
 
         public:
-            Module() {};
-            ~Module() {};
+            Module();
+            ~Module();
             
 
     };

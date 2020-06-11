@@ -6,8 +6,8 @@ namespace FFS {
         protected:
 
         public:
-            LocalModule() {};
-            ~LocalModule() {};
+            LocalModule();
+            ~LocalModule();
     };
 }
 

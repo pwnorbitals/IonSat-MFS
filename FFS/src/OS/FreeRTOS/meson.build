@@ -1,0 +1,1 @@
+header_files += files('FreeRTOS.h', 'semaphore.h', 'task.h')
