@@ -1,22 +1,25 @@
 #include "FFS.h"
+#include <type_traits>
 
 namespace FFS {
-
-    void addMode() {
-
-    };
-
-    void init() {
-
-    };
 
     template<typename ...chans_t>
     void Controller<chans_t...>::addMode() {
 
     };
 
+    
+
+    template<typename ref_type, typename ...types>
+    struct is_any_of: std::integral_constant<bool,(std::is_same_v<ref_type,types>||...)>{};
+
+    template<typename ref_type, typename ...types>
+    inline constexpr bool is_any_of_v = is_any_of<ref_type, types...>::value;
+
     template<typename chan_t>
     void emit(FFS::Event<chan_t> evt) {
+        auto ctrlr = Controller::Controller()
+
 
     };
 
@@ -37,8 +40,9 @@ namespace FFS {
     };
 
     template<typename ...chans_t>
-    Controller<chans_t...>::Controller(std::tuple<FFS::Chan<chans_t...>> channels) {
-
+    Controller<chans_t...>::Controller(std::tuple<FFS::Chan<chans_t...>> channels) :
+        subscribed{channels} {
+        
     };
 
     template<typename ...chans_t>

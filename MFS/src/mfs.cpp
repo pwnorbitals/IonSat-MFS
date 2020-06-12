@@ -24,13 +24,12 @@ void cinFct(std::function<void(char*)> recvData) {
 }
 
 class ConsoleModule : public FFS::RemoteModule {
-    public:
         std::thread cinThread;
 
         ConsoleModule() : RemoteModule{}, cinThread{cinFct, recvData} {}
 
-    protected:
-        void recvData(char* buf, unsigned int len) {
+
+        virtual void recvData(char* buf, unsigned int len) {
             this->addIncoming(buf, len);
         }
 
@@ -53,7 +52,7 @@ int main() {
 
 
 
-    
+
 
     FFS::start();
 

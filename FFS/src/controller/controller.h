@@ -44,16 +44,16 @@ namespace FFS {
         protected:
             static Controller& instance;
 
-            std::tuple<FFS::Chan<chans_t...>> subscribed;
+            std::tuple<FFS::Chan<chans_t...>> channels;
             std::list<std::unique_ptr<FFS::Module>> modules;
             std::list<FFS::Mode> modes;
 
-            Controller();
+            Controller(std::tuple<FFS::Chan<...chans_t>> channels);
 
         public:
             static template<typename ...chans_t> init(std::tuple<FFS::Chan<chans_t...>> channels);
             virtual ~Controller();
-            Controller& operator()();
+            static Controller& operator()();
             void addMode();
             template<typename chan_t> void emit(FFS::Event<chan_t>);
             void start();
