@@ -4,6 +4,7 @@
 #include <list>
 #include <tuple>
 #include <memory>
+#include <any>
 
 #include "module/module.h"
 #include "mode/mode.h"
@@ -15,8 +16,6 @@ namespace FFS {
 
     template<typename ref_type, typename ...types>
     inline constexpr bool is_any_of_v = is_any_of<ref_type, types...>::value;
-
-
 
     template<typename _message_t, typename ...receivers_t>
     class Chan {
@@ -34,10 +33,23 @@ namespace FFS {
             }
     };
 
+    void* globalController;
+
+    template<typename message_t>
+    void emit(const message_t& message) {
+        globalController->emit(message);
+    }
+
     template<typename chan_t,typename message_t>
     constexpr void emit(const chan_t& c, const message_t& m) {
-        static_assert(std::is_same_v<typename chan_t::message_t,message_t>, "Wrong message type for this channel");
-        std::apply([m](auto... receiver){(receiver(m),...);},c.receivers);
+        if constexpr(std::is_same_v<typename chan_t::message_t,message_t>) {
+            std::apply([m](auto... receiver){(receiver(m),...);},c.receivers);
+        }
+    }
+
+    template<typename chan_t, typename ...receivers_t>
+    Chan<chan_t, receivers_t...> make_chan(receivers_t... receivers) {
+        return Chan{chan_t{}, receivers...};
     }
 
 
@@ -49,6 +61,7 @@ namespace FFS {
             std::tuple<FFS::Mode> modes;
 
         public:
+            Controller(){};
             Controller(std::tuple<FFS::Mode> modes, std::tuple<FFS::Chan<chans_t...>> channels);
             virtual ~Controller();
             
@@ -56,6 +69,9 @@ namespace FFS {
             void start();
 
     };
+
+
+
 
 
 

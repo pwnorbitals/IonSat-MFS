@@ -58,8 +58,8 @@ int main() {
     auto consoleChan = FFS::make_chan<consoleEvent>(consoleChanHdlrs);
     auto chans = std::make_tuple(consoleChan);
 
-    auto controller = FFS::Controller{modes, chans};
-    controller.start();
+    FFS::addController{modes, chans};
+    FFS::start();
 
     return 0;
 }

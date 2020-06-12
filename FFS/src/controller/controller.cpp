@@ -10,15 +10,17 @@ namespace FFS {
 
     template<typename ...chans_t>
     Controller<chans_t...>::Controller(std::tuple<FFS::Mode> _modes, std::tuple<FFS::Chan<chans_t...>> _channels) :
-        modes{_modes}, channels{_channels} {};
+        modes{_modes}, channels{_channels} {
+        FFS::globalController = &this;
+    };
 
 
     template<typename ...chans_t>
     Controller<chans_t...>::~Controller() {};
 
     template<typename chan_t, typename ...chans_t>
-    Controller<chans_t...>::emit(chan_t message) {
-
+    void Controller<chans_t...>::emit(chan_t message) {
+        std::apply([message](auto... chan){(emit(chan,message),...);}, this->channels);
     };
 
 }
