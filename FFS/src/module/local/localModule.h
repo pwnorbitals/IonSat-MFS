@@ -2,17 +2,17 @@
 #define LOCALMODULE_H_INC
 
 #include <functional>
+#include <tuple>
 
 namespace FFS {
     class LocalModule {
         protected:
-            std::list<std::pair<eventType, std::function<void(eventType)>>> handlers;
+            std::tuple<FFS::Task> tasks;
 
         public:
             LocalModule();
             virtual ~LocalModule();
 
-            void addHandler(eventType type, std::function<void(eventType)> handler);
     };
 }
 

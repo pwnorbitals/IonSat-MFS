@@ -7,7 +7,6 @@
 namespace FFS {
     class Module {
         protected:
-            virtual void sendEvent(FFS::Event) = 0;
 
         public:
             Module();

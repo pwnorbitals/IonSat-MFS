@@ -13,12 +13,6 @@ namespace FFS {
     template<typename T> void emit(T evt);
     void start();
 
-    template<typename ...chans_t>
-    void declareChannels();
-
-    template<typename chan_t,typename message_t>
-    constexpr void emit(const chan_t& c, const message_t& m);
-
     template<typename _message_t, typename ...receivers_t>
     class Chan {
         protected:
@@ -27,37 +21,45 @@ namespace FFS {
         public:
             using message_t = _message_t;
 
-            template<typename _message_t>
-            chan(const std::tuple<receivers_t...>& rec)
-                :receivers{rec}{}
+            Chan(const _message_t&, const std::tuple<receivers_t...>& rec):receivers{rec}{}
             
-            const chan& operator<<(const _message_t& m) const {
+            const Chan& operator<<(const _message_t& m) const {
                 send(*this,m);
                 return *this;
             }
     };
+
+    template<typename ...chans_t>
+    void init(std::tuple<FFS::Mode> modes, std::tuple<FFS::Chan<chans_t...>> channels);
+
+    template<typename chan_t,typename message_t>
+    constexpr void emit(const chan_t& c, const message_t& m);
+
 
     // Singleton class
     // BE CAREFUL WITH MULTITASKING ??!!
     template<typename ...chans_t>
     class Controller {
         protected:
-            static Controller& instance;
-
             std::tuple<FFS::Chan<chans_t...>> channels;
-            std::list<std::unique_ptr<FFS::Module>> modules;
-            std::list<FFS::Mode> modes;
+            std::tuple<std::unique_ptr<FFS::Module>> modules;
+            std::tuple<FFS::Mode> modes;
 
-            Controller(std::tuple<FFS::Chan<...chans_t>> channels);
+            Controller(std::tuple<FFS::Mode>modes, std::tuple<FFS::Chan<chans_t...>> channels);
+            virtual ~Controller();
+
 
         public:
-            static template<typename ...chans_t> init(std::tuple<FFS::Chan<chans_t...>> channels);
-            virtual ~Controller();
-            static Controller& operator()();
-            void addMode();
-            template<typename chan_t> void emit(FFS::Event<chan_t>);
+            static void init(std::tuple<FFS::Mode> modes, std::tuple<FFS::Chan<chans_t...>> channels);
+            
+            template<typename chan_t> void emit(chan_t data);
             void start();
+            
+            static Controller& instance();
+
     };
+
+
 }
 
 #endif

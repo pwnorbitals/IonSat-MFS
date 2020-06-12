@@ -11,11 +11,7 @@ struct consoleEvent {
 
 
 
-
-
-
-
-void cinFct(std::function<void(char*)> recvData) {
+void cinFct() {
     auto input = std::string{};
     while(true) {
         std::cin >> input;
@@ -24,34 +20,38 @@ void cinFct(std::function<void(char*)> recvData) {
 }
 
 class ConsoleModule : public FFS::RemoteModule {
-        std::thread cinThread;
+        std::thread cinThread; // Simulates execution on another hardware
 
-        ConsoleModule() : RemoteModule{}, cinThread{cinFct, recvData} {}
+        public:
+            ConsoleModule() : RemoteModule{}, cinThread{cinFct} {}
 
 
-        virtual void recvData(char* buf, unsigned int len) {
-            this->addIncoming(buf, len);
-        }
+            void recvData() override {
+                // this->addIncoming(buf, len);
+            }
 
-        void sendData(char* buf) {
-            std::cout << buf << std::endl;
-        }
+            void sendData(char* buf, unsigned int inlen) override  {
+                std::cout << buf << std::endl;
+            }
 };
 
 void consoleEvtHdlr (consoleEvent evt) {
     std::cout << "EVENT RECEIVED : " << evt.msg << std::endl;
 }
 
+
+
+
+
 int main() {
     std::cout << "test" << std::endl;
     FFS::iotest();
 
-    FFS::declareChannels<consoleEvent>();
 
     auto testModule = ConsoleModule{};
 
-
-
+    FFS::init(std::make_tuple(FFS::Mode{"test"}), std::make_tuple(FFS::Chan{consoleEvent{}, std::make_tuple(consoleEvtHdlr)}));
+    
 
 
     FFS::start();

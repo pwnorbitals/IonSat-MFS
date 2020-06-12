@@ -7,7 +7,7 @@ namespace FFS {
             std::string name;
 
         public:
-            Mode();
+            Mode(std::string name);
             virtual ~Mode();
     };
 }

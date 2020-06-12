@@ -1,3 +1,1 @@
-project('MFS', 'cpp')
-incdir = include_directories('../../FFS/src')
-executable('MFS', 'mfs.cpp', include_directories : incdir)
+executable('MFS', 'mfs.cpp', include_directories : incdir, link_with : FFS)

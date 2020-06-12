@@ -2,7 +2,9 @@
 #define TASK_H_INC
 
 namespace FFS {
+    class Task {
 
+    };
 }
 
 #endif

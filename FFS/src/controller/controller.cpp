@@ -2,13 +2,7 @@
 #include <type_traits>
 
 namespace FFS {
-
-    template<typename ...chans_t>
-    void Controller<chans_t...>::addMode() {
-
-    };
-
-    
+   
 
     template<typename ref_type, typename ...types>
     struct is_any_of: std::integral_constant<bool,(std::is_same_v<ref_type,types>||...)>{};
@@ -17,11 +11,18 @@ namespace FFS {
     inline constexpr bool is_any_of_v = is_any_of<ref_type, types...>::value;
 
     template<typename chan_t>
-    void emit(FFS::Event<chan_t> evt) {
-        auto ctrlr = Controller::Controller()
+    void emit(chan_t evt) {
+        auto ctrlr = Controller::instance;
+
+
 
 
     };
+
+    template<typename ...chans_t>
+    void init(std::tuple<FFS::Mode> modes, std::tuple<FFS::Chan<chans_t...>> channels) {
+
+    }
 
     
     template<typename chan_t,typename message_t>
@@ -40,8 +41,8 @@ namespace FFS {
     };
 
     template<typename ...chans_t>
-    Controller<chans_t...>::Controller(std::tuple<FFS::Chan<chans_t...>> channels) :
-        subscribed{channels} {
+    Controller<chans_t...>::Controller(std::tuple<FFS::Mode> _modes, std::tuple<FFS::Chan<chans_t...>> c_hannels) :
+        modes{_modes}, channels{_channels} {
         
     };
 
@@ -51,13 +52,9 @@ namespace FFS {
     };
 
     template<typename ...chans_t>
-    Controller<chans_t...>& Controller<chans_t...>::operator()() {
-        return instance;
-    };
-
-    template<typename ...chans_t>
-    Controller<chans_t...>& Controller<chans_t...>::declareChannels(std::tuple<FFS::Chan<chans_t...>> channels) {
-        instance = Controller{channels};
+    Controller<chans_t...>& Controller<chans_t...>::instance(){
+        static FFS::Controller self;
+        return self;
     }
 
 }
