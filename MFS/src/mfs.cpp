@@ -20,7 +20,7 @@ void cinFct() {
 }
 
 class ConsoleModule : public FFS::RemoteModule {
-        std::thread cinThread; // Simulates execution on another hardware
+        std::thread cinThread; // Simulates execution on external hardware
 
         public:
             ConsoleModule() : RemoteModule{}, cinThread{cinFct} {}
@@ -50,11 +50,16 @@ int main() {
 
     auto testModule = ConsoleModule{};
 
-    FFS::init(std::make_tuple(FFS::Mode{"test"}), std::make_tuple(FFS::Chan{consoleEvent{}, std::make_tuple(consoleEvtHdlr)}));
-    
+    auto testMode = FFS::Mode{"test"};
+    auto modes = std::make_tuple(testMode);
 
+    auto consoleChanHdlrs = std::make_tuple(consoleEvtHdlr);
+    // auto consoleChan = FFS::Chan{consoleEvent{}, consoleChanHdlrs};
+    auto consoleChan = FFS::make_chan<consoleEvent>(consoleChanHdlrs);
+    auto chans = std::make_tuple(consoleChan);
 
-    FFS::start();
+    auto controller = FFS::Controller{modes, chans};
+    controller.start();
 
     return 0;
 }
