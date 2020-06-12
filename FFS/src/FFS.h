@@ -6,7 +6,6 @@
 #define OS FREERTOS
 
 #include "OS/OS.h"
-#include "event/event.h"
 #include "module/module.h"
 #include "controller/controller.h"
 #include "mode/mode.h"

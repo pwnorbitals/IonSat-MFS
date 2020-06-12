@@ -1,22 +1,25 @@
 #include <iostream>
 #include <thread>
 #include <functional>
+
 #include "FFS.h"
 
 
-FFS::EventType<char[512]> consoleEvent;
-
-
-auto eventTypes = std::list<FFS::EventType> {
-    consoleEvent
+struct consoleEvent {
+    std::string msg;
 };
+
+
+
+
+
+
 
 void cinFct(std::function<void(char*)> recvData) {
     auto input = std::string{};
     while(true) {
         std::cin >> input;
-        FFS::Event inputEvent(ConsoleEvent, input.c_str());
-        recvData(inputEvent.serialize()); 
+        FFS::emit(consoleEvent{input});
     }
 }
 
@@ -36,16 +39,21 @@ class ConsoleModule : public FFS::RemoteModule {
         }
 };
 
-void consoleEvtHdlr (FFS::Event evt) {
-    std::cout << "EVENT RECEIVED : " << evt.getData().data << std::endl;
+void consoleEvtHdlr (consoleEvent evt) {
+    std::cout << "EVENT RECEIVED : " << evt.msg << std::endl;
 }
 
 int main() {
     std::cout << "test" << std::endl;
     FFS::iotest();
 
-    auto testModule = FFS::ConsoleModule{};
-    testModule.addHandler(eventType::consoleEvent, consoleEvtHdlr);
+    FFS::declareChannels<consoleEvent>();
+
+    auto testModule = ConsoleModule{};
+
+
+
+    
 
     FFS::start();
 

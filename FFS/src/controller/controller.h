@@ -10,30 +10,52 @@
 
 namespace FFS {
 
-    void addEventType();
-    void addMode();
-    template<typename T>
-    void emit(FFS::Event<T> evt);
+    template<typename T> void emit(T evt);
     void start();
+
+    template<typename ...chans_t>
+    void declareChannels();
+
+    template<typename chan_t,typename message_t>
+    constexpr void emit(const chan_t& c, const message_t& m);
+
+    template<typename _message_t, typename ...receivers_t>
+    class Chan {
+        protected:
+            std::tuple<receivers_t...> receivers;
+
+        public:
+            using message_t = _message_t;
+
+            template<typename _message_t>
+            chan(const std::tuple<receivers_t...>& rec)
+                :receivers{rec}{}
+            
+            const chan& operator<<(const _message_t& m) const {
+                send(*this,m);
+                return *this;
+            }
+    };
 
     // Singleton class
     // BE CAREFUL WITH MULTITASKING ??!!
+    template<typename ...chans_t>
     class Controller {
         protected:
             static Controller& instance;
 
-            std::list<std::tuple<std::unique_ptr<FFS::Module>, FFS::eventType>> subscribed;
-            FFS::Task dispatcher;
+            std::tuple<FFS::Chan<chans_t...>> subscribed;
             std::list<std::unique_ptr<FFS::Module>> modules;
             std::list<FFS::Mode> modes;
 
+            Controller();
 
         public:
-            Controller();
+            static template<typename ...chans_t> init(std::tuple<FFS::Chan<chans_t...>> channels);
             virtual ~Controller();
             Controller& operator()();
             void addMode();
-            void emit(FFS::Event);
+            template<typename chan_t> void emit(FFS::Event<chan_t>);
             void start();
     };
 }
