@@ -33,19 +33,13 @@ namespace FFS {
             }
     };
 
-    void* globalController;
-
-    template<typename message_t>
-    void emit(const message_t& message) {
-        globalController->emit(message);
-    }
-
     template<typename chan_t,typename message_t>
-    constexpr void emit(const chan_t& c, const message_t& m) {
+    constexpr void emitOnChan(const chan_t& c, const message_t& m) {
         if constexpr(std::is_same_v<typename chan_t::message_t,message_t>) {
             std::apply([m](auto... receiver){(receiver(m),...);},c.receivers);
         }
     }
+
 
     template<typename chan_t, typename ...receivers_t>
     Chan<chan_t, receivers_t...> make_chan(receivers_t... receivers) {
@@ -56,19 +50,27 @@ namespace FFS {
     template<typename ...chans_t>
     class Controller {
         protected:
-            std::tuple<FFS::Chan<chans_t...>> channels;
+            std::tuple<FFS::Chan<chans_t>> channels;
             std::tuple<std::unique_ptr<FFS::Module>> modules;
             std::tuple<FFS::Mode> modes;
 
         public:
             Controller(){};
-            Controller(std::tuple<FFS::Mode> modes, std::tuple<FFS::Chan<chans_t...>> channels);
+            Controller();
             virtual ~Controller();
             
             template<typename chan_t> void emit(chan_t data);
             void start();
 
+            template<typename ..._chans_t>
+            void configure(std::tuple<FFS::Mode> modes, std::tuple<FFS::Chan<_chans_t...>> channels)
+
     };
+
+    template<typename ...chans_t>
+    void configure(std::tuple<FFS::Mode> modes, std::tuple<FFS::Chan<chans_t...>> channels) {
+        globalController =
+    }
 
 
 

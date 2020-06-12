@@ -47,6 +47,7 @@ int main() {
     std::cout << "test" << std::endl;
     FFS::iotest();
 
+    auto controller = FFS::Controller();
 
     auto testModule = ConsoleModule{};
 
@@ -54,12 +55,11 @@ int main() {
     auto modes = std::make_tuple(testMode);
 
     auto consoleChanHdlrs = std::make_tuple(consoleEvtHdlr);
-    // auto consoleChan = FFS::Chan{consoleEvent{}, consoleChanHdlrs};
     auto consoleChan = FFS::make_chan<consoleEvent>(consoleChanHdlrs);
     auto chans = std::make_tuple(consoleChan);
 
-    FFS::addController{modes, chans};
-    FFS::start();
+    controller.configure(modes, chans);
+    controller.start();
 
     return 0;
 }
