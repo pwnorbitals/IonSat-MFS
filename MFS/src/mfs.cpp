@@ -10,20 +10,21 @@ struct consoleEvent {
 };
 
 
-
-void cinFct() {
+template<typename ...ctrlr_t>
+void cinFct(FFS::Controller<ctrlr_t...> FFS) {
     auto input = std::string{};
     while(true) {
         std::cin >> input;
-        FFS::emit(consoleEvent{input});
+        FFS.emit(consoleEvent{input});
     }
 }
 
+template<typename ...ctrlr_t>
 class ConsoleModule : public FFS::RemoteModule {
         std::thread cinThread; // Simulates execution on external hardware
 
         public:
-            ConsoleModule() : RemoteModule{}, cinThread{cinFct} {}
+            ConsoleModule() : RemoteModule{}, cinThread{cinFct<ctrlr_t...>} {}
 
 
             void recvData() override {
@@ -47,7 +48,7 @@ int main() {
     std::cout << "test" << std::endl;
     FFS::iotest();
 
-    auto controller = FFS::Controller();
+
 
     auto testModule = ConsoleModule{};
 
@@ -58,7 +59,10 @@ int main() {
     auto consoleChan = FFS::make_chan<consoleEvent>(consoleChanHdlrs);
     auto chans = std::make_tuple(consoleChan);
 
-    controller.configure(modes, chans);
+    // For non-static member function
+    // std::bind(&module3::print, &m3, std::placeholders::_1)
+
+    auto controller = FFS::Controller(modes, chans);
     controller.start();
 
     return 0;

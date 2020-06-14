@@ -50,26 +50,23 @@ namespace FFS {
     template<typename ...chans_t>
     class Controller {
         protected:
-            std::tuple<FFS::Chan<chans_t>> channels;
+            std::tuple<FFS::Chan<chans_t...>> channels;
             std::tuple<std::unique_ptr<FFS::Module>> modules;
             std::tuple<FFS::Mode> modes;
 
         public:
-            Controller(){};
-            Controller();
+            Controller(std::tuple<FFS::Mode> _modes, std::tuple<FFS::Chan<chans_t...>> _channels);
             virtual ~Controller();
             
             template<typename chan_t> void emit(chan_t data);
-            void start();
 
-            template<typename ..._chans_t>
-            void configure(std::tuple<FFS::Mode> modes, std::tuple<FFS::Chan<_chans_t...>> channels)
+            void start();
 
     };
 
     template<typename ...chans_t>
     void configure(std::tuple<FFS::Mode> modes, std::tuple<FFS::Chan<chans_t...>> channels) {
-        globalController =
+
     }
 
 
