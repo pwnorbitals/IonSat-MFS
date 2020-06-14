@@ -17,7 +17,7 @@ namespace FFS {
 
     template<typename ...chans_t>
     template<typename chan_t>
-    void Controller<chans_t...>::emit(chan_t message) {
+    void Controller<chans_t...>::emit (chan_t message) const {
         std::apply([message](auto... chan){(emitOnChan(chan,message),...);}, channels);
     };
 

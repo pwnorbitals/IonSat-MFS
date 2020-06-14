@@ -25,7 +25,7 @@ namespace FFS {
         public:
             using message_t = _message_t;
 
-            Chan(const _message_t&, const std::tuple<receivers_t...>& rec):receivers{rec}{}
+            Chan(const _message_t&, const std::tuple<receivers_t...>& rec) : receivers{rec}{}
             
             const Chan& operator<<(const _message_t& m) const {
                 emit(*this,m);
@@ -58,8 +58,7 @@ namespace FFS {
             Controller(std::tuple<FFS::Mode> _modes, std::tuple<FFS::Chan<chans_t...>> _channels);
             virtual ~Controller();
             
-            template<typename chan_t> void emit(chan_t data);
-
+            template<typename chan_t> void emit (chan_t data) const;
             void start();
 
     };
