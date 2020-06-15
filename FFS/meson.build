@@ -5,5 +5,4 @@ header_files = []
 
 subdir('src')
 
-
-FFS = library('FFS', source_files,include_directories : incdir)
+FFS = library('FFS', source_files, include_directories : incdir)

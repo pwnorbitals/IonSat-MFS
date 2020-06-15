@@ -17,7 +17,7 @@ namespace FFS {
 
             virtual void recvData() = 0;
             virtual void sendData(char* buf, unsigned int inlen) = 0;
-            void addIncoming(char* buf, unsigned int inlen);   
+            void addIncoming(char* buf, unsigned int inlen) {};
     };
 };
 

@@ -27,17 +27,20 @@ namespace FFS {
             Chan(const _message_t&, const std::tuple<receivers_t...>& rec) : receivers{rec}{}
             
             const Chan& operator<<(const _message_t& m) const {
-                emit(*this,m);
+                this->emit(m);
                 return *this;
             }
+
+            template<typename inmsg_t>
+            constexpr void emit(const inmsg_t& m) {
+                if constexpr(std::is_same_v<message_t,inmsg_t>) {
+                    std::apply([m](auto... receiver){(receiver(m),...);},receivers);
+                }
+            }
+
     };
 
-    template<typename chan_t,typename message_t>
-    constexpr void emitOnChan(const chan_t& c, const message_t& m) {
-        if constexpr(std::is_same_v<typename chan_t::message_t,message_t>) {
-            std::apply([m](auto... receiver){(receiver(m),...);},c.receivers);
-        }
-    }
+
 
 
     template<typename chan_t, typename ...receivers_t>
@@ -54,11 +57,16 @@ namespace FFS {
             std::tuple<FFS::Mode> modes;
 
         public:
-            Controller(std::tuple<FFS::Mode> _modes, std::tuple<FFS::Chan<chans_t...>> _channels);
-            virtual ~Controller();
+            Controller(std::tuple<FFS::Mode> _modes, std::tuple<FFS::Chan<chans_t...>> _channels) : channels{_channels}, modules{}, modes{_modes} { };
+            virtual ~Controller() {};
             
-            template<typename chan_t> void emit (chan_t data) const;
-            void start();
+            template<typename chan_t> void emit (chan_t message) const {
+                std::apply([message](auto... chan){(chan.emit(message),...);}, channels);
+            };
+
+            void start() {
+
+            }
 
     };
 

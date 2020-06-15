@@ -7,8 +7,8 @@ namespace FFS {
             std::string name;
 
         public:
-            Mode(std::string _name);
-            virtual ~Mode();
+            Mode(std::string _name) : name{_name} {};
+            virtual ~Mode() {};
     };
 }
 

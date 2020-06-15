@@ -73,7 +73,11 @@ class ConsoleModule{
 };
 
 void consoleEvtHdlr (consoleEvent evt) {
-    std::cout << "EVENT RECEIVED : " << evt.msg << std::endl;
+    std::cout << "CONSOLE EVENT RECEIVED : " << evt.msg << std::endl;
+}
+
+void signalEvtHdlr (signalEvent evt) {
+    std::cout << "SIGNAL EVENT RECEIVED : " << evt.signal << std::endl;
 }
 
 
@@ -91,6 +95,7 @@ int main() {
     // auto consoleChan = FFS::make_chan<consoleEvent>(consoleEvtHdlr);
 
     auto consoleChan = FFS::Chan{consoleEvent{}, std::make_tuple(consoleEvtHdlr)};
+    auto signalChan = FFS::Chan{signalEvent{}, std::make_tuple()};
     auto chans = std::make_tuple(consoleChan);
 
     // For non-static member function
