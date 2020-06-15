@@ -20,18 +20,18 @@ void cinFct(ctrlr_t FFS) {
 }
 
 template<typename ctrlr_t>
-class ConsoleModule : public FFS::RemoteModule {
+class ConsoleModule{
         std::thread cinThread; // Simulates execution on external hardware
 
         public:
-            ConsoleModule(ctrlr_t FFS) : RemoteModule{}, cinThread{cinFct<ctrlr_t>, FFS} {}
+            ConsoleModule(ctrlr_t FFS) : cinThread{cinFct<ctrlr_t>, FFS} {}
 
 
-            void recvData() override {
+            void recvData() {
                 // this->addIncoming(buf, len);
             }
 
-            void sendData(char* buf, unsigned int inlen) override  {
+            void sendData(char* buf, unsigned int inlen)  {
                 std::cout << buf << std::endl;
             }
 };
