@@ -62,16 +62,6 @@ namespace FFS {
 
     };
 
-    template<typename ...chans_t>
-    void configure(std::tuple<FFS::Mode> modes, std::tuple<FFS::Chan<chans_t...>> channels) {
-
-    }
-
-
-
-
-
-
 
 }
 

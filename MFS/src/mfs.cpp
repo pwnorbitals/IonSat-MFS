@@ -3,12 +3,17 @@
 #include <functional>
 #include <queue>
 #include <string>
+#include <csignal>
 
 #include "FFS.h"
 
 
 struct consoleEvent {
     std::string msg;
+};
+
+struct signalEvent {
+    int signal;
 };
 
 
@@ -29,9 +34,11 @@ class Queue {
 
 };
 
-void cinFct(Queue<std::string> recvQ, Queue<std::string> sendQ) {
+void cinFct(Queue<std::string>& recvQ, Queue<std::string>& sendQ) {
+    auto go = true;
+    recvQ.Register([&go](Queue<std::string>& q) { if(q.Pop() == "stop") { go = false; }});
     auto input = std::string{};
-    while(true) {
+    while(go) {
         std::cin >> input;
         sendQ.Push(input);
     }
@@ -41,7 +48,7 @@ void cinFct(Queue<std::string> recvQ, Queue<std::string> sendQ) {
 template<typename ctrlr_t>
 class ConsoleModule{
 
-        ctrlr_t FFS;
+        ctrlr_t& FFS;
         Queue<std::string> sendQ;
         Queue<std::string> recvQ;
         std::thread cinThread; // Simulates execution on external hardware
@@ -50,14 +57,19 @@ class ConsoleModule{
             void recvData(Queue<std::string>& q) {
                 auto recvd = q.Pop();
                 std::cout << "RECEIVED FROM THREAD : " << recvd << std::endl;
-                FFS.get().emit(consoleEvent{recvd});
+                FFS.emit(consoleEvent{recvd});
             }
 
             void sendData(Queue<std::string>& q, std::string s)  { q.Push(s); }
 
-            ConsoleModule(ctrlr_t _FFS) : FFS{_FFS}, sendQ{}, recvQ{}, cinThread{cinFct, sendQ, recvQ} {
-                recvQ.Register(std::bind(&ConsoleModule::recvData, *this, std::placeholders::_1));
+            ConsoleModule(ctrlr_t& _FFS) : FFS{_FFS}, sendQ{}, recvQ{} {
+                std::thread t([this]() { cinFct(recvQ, sendQ); });
+                cinThread = std::move(t);
+                recvQ.Register([this](Queue<std::string>& q) -> void {this->recvData(q);});
+                // recvQ.Register(std::bind(&ConsoleModule::recvData, this, std::placeholders::_1));
             }
+
+            ~ConsoleModule() { sendQ.Push("stop"); cinThread.join(); }
 };
 
 void consoleEvtHdlr (consoleEvent evt) {
@@ -72,16 +84,11 @@ int main() {
     std::cout << "test" << std::endl;
     FFS::iotest();
 
-
-
-
-
     auto testMode = FFS::Mode{"test"};
     auto modes = std::make_tuple(testMode);
 
     // doesn't compile :
     // auto consoleChan = FFS::make_chan<consoleEvent>(consoleEvtHdlr);
-
 
     auto consoleChan = FFS::Chan{consoleEvent{}, std::make_tuple(consoleEvtHdlr)};
     auto chans = std::make_tuple(consoleChan);
@@ -90,7 +97,9 @@ int main() {
     // std::bind(&module3::print, &m3, std::placeholders::_1)
 
     auto controller = FFS::Controller{modes, chans};
-    auto testModule = ConsoleModule{std::cref(controller)};
+    auto testModule = ConsoleModule{controller};
+
+    // std::signal(SIGINT, [&](int signum) -> void { controller.emit(signalEvent{signum});  });
 
     controller.start();
 
