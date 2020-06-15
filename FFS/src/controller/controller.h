@@ -6,7 +6,6 @@
 #include <memory>
 #include <any>
 
-#include "module/module.h"
 #include "mode/mode.h"
 
 namespace FFS {

@@ -14,6 +14,9 @@ namespace FFS {
 
     };
 
+    template<typename ...chans_t>
+    Controller<chans_t...>::~Controller(){}
+
 
     template<typename ...chans_t>
     template<typename chan_t>
