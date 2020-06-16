@@ -1,0 +1,4 @@
+#ifndef MESSAGEBUFFER_H
+#define MESSAGEBUFFER_H
+
+#endif // MESSAGEBUFFER_H

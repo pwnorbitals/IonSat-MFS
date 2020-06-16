@@ -101,10 +101,10 @@ int main() {
 
 
     auto consoleChan = FFS::make_chan<consoleEvent>(consoleEvtHdlr);
-    auto signalChan = FFS::make_chan<signalEvent>(signalEvtHdlr);
-    auto chans = std::make_tuple(consoleChan, signalChan);
+    auto signalChan = FFS::make_chan<signalEvent>();
+    auto chans = std::make_tuple(consoleChan);
 
-    // For non-static member function :
+    // For non-static member function
     // std::bind(&module3::print, &m3, std::placeholders::_1)
 
     auto controller = FFS::Controller{modes, chans};

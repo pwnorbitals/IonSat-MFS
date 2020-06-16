@@ -1,0 +1,4 @@
+#ifndef STREAMBUFFER_H
+#define STREAMBUFFER_H
+
+#endif // STREAMBUFFER_H
