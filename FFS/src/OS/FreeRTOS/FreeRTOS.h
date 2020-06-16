@@ -1,10 +1,9 @@
 #ifndef FREERTOS_H_INC
 #define FREERTOS_H_INC
 
-#include "semaphore.h"
-#include "task.h"
-
 #include "FreeRTOS.h"
+#include "FreeRTOSConfig.h"
+#include "portmacro.h"
 
 #include "eventGroup.h"
 #include "messageBuffer.h"
@@ -15,9 +14,6 @@
 #include "timer.h"
 
 namespace FFS {
-    namespace OS {
-
-    }
 
 }
 
@@ -32,13 +28,11 @@ extern "C" {
     {
 
         #ifdef __GCC_POSIX__
-
             struct timespec xTimeToSleep, xTimeSlept;
                 /* Makes the process more agreeable when using the Posix simulator. */
                 xTimeToSleep.tv_sec = 1;
                 xTimeToSleep.tv_nsec = 0;
                 nanosleep( &xTimeToSleep, &xTimeSlept );
-
         #endif
     }
 
