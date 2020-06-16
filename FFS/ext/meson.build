@@ -6,8 +6,8 @@ FreeRTOS_allocator = 'heap_3'
 FreeRTOS_dir = 'FreeRTOS/'+FreeRTOS_dirname+'/FreeRTOS/Source/'
 
 FreeRTOS_inc = include_directories(
-    FreeRTOS_dir+'include',
-    FreeRTOS_dir+'portable/'+FreeRTOS_compiler+'/'+FreeRTOS_port,
+    FreeRTOS_dir+'include/',
+    FreeRTOS_dir+'portable/'+FreeRTOS_compiler+'/'+FreeRTOS_port+'/',
     'FreeRTOS/',
     'FreeRTOS/ESFree/'
     )
@@ -25,10 +25,5 @@ FreeRTOS_src = files(
     )
 
 
-# thread_dep = dependency('threads')
-# FreeRTOS = library('FreeRTOS', FreeRTOS_src, include_directories : FreeRTOS_inc, dependencies : thread_dep)
-
 source_files += FreeRTOS_src
-header_files += FreeRTOS_inc
-
 incdir += FreeRTOS_inc

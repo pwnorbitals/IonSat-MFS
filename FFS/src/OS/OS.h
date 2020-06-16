@@ -4,7 +4,7 @@
 #define OS FREERTOS
 
 #if OS == FREERTOS
-    #include "FreeRTOS/FreeRTOS.h"
+    #include "FreeRTOS/FFS_FreeRTOS.h"
 #else
     #include "stl/stl.h"
 #endif
