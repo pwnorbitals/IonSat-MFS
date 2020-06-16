@@ -5,4 +5,5 @@ header_files = []
 subdir('src')
 subdir('ext')
 
-FFS = library('FFS', source_files, include_directories : incdir)
+thread_dep = dependency('threads')
+FFS = library('FFS', source_files, include_directories : incdir, dependencies : thread_dep)

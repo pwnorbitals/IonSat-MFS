@@ -11,6 +11,7 @@
     void *operator new[](std::size_t) {    return operator_blocker();    }
 #endif
 
+
 namespace FFS {
     void iotest() { std::cout << "FFS test" << std::endl; }
 }
