@@ -4,6 +4,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "queue.h"
+#include "semaphore.h"
 
 namespace FFS {
 
@@ -163,6 +164,8 @@ namespace FFS {
             return xQueuePeekFromISR(queueHandle, pvBuffer);
         }
 
+
+        /*
         void addToRegistry(char *pcQueueName) {
             vQueueAddToRegistry( queueHandle, pcQueueName);
         }
@@ -175,10 +178,29 @@ namespace FFS {
         const char *getName() {
             return pcQueueGetName( queueHandle );
         }
+        */
 
 
 
 
+    };
+
+    class Semaphore {
+        SemaphoreHandle_t semaphoreHandle;
+        StaticSemaphore_t semaphoreBuffer;
+
+    public:
+        Semaphore() {
+            semaphoreHandle = xSemaphoreCreateBinaryStatic(&semaphoreBuffer);
+        }
+
+        Semaphore(UBaseType_t uxMaxCount, UBaseType_t uxInitialCount) {
+            semaphoreHandle = xSemaphoreCreateCountingStatic(uxMaxCount, uxInitialCount, &semaphoreBuffer);
+        }
+
+        ~Semaphore() {
+            vSemaphoreDelete( semaphoreHandle );
+        }
     };
 
 
