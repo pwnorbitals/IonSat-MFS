@@ -8,7 +8,7 @@ FreeRTOS_dir = 'FreeRTOS/'+FreeRTOS_dirname+'/FreeRTOS/Source/'
 FreeRTOS_inc = include_directories(
     FreeRTOS_dir+'include/',
     FreeRTOS_dir+'portable/'+FreeRTOS_compiler+'/'+FreeRTOS_port+'/',
-    'FreeRTOS/',
+    'FreeRTOS/'+FreeRTOS_dirname,
     'FreeRTOS/ESFree/'
     )
 FreeRTOS_src = files(

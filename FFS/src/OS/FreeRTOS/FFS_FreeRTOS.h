@@ -1,10 +1,10 @@
 #ifndef FREERTOS_H_INC
 #define FREERTOS_H_INC
 
-#include "FreeRTOS.h"
-#include "task.h"
-#include "queue.h"
-#include "semaphore.h"
+#include "FreeRTOS/Source/include/FreeRTOS.h"
+#include "FreeRTOS/Source/include/task.h"
+#include "FreeRTOS/Source/include/queue.h"
+#include "FreeRTOS/Source/include/semphr.h"
 
 namespace FFS {
 
@@ -201,6 +201,7 @@ namespace FFS {
         ~Semaphore() {
             vSemaphoreDelete( semaphoreHandle );
         }
+
     };
 
 
@@ -224,6 +225,25 @@ extern "C" {
                 xTimeToSleep.tv_nsec = 0;
                 nanosleep( &xTimeToSleep, &xTimeSlept );
         #endif
+    }
+
+    void vApplicationGetIdleTaskMemory( void ) {
+
+    }
+    void vApplicationGetTimerTaskMemory( void ) {
+
+    }
+
+    void* pvTaskGetThreadLocalStoragePointer( void ){
+
+    }
+
+    void vTaskSetThreadLocalStoragePointer( void ){
+
+    }
+
+    TaskHandle_t xTaskGetIdleTaskHandle() {
+
     }
 
 }

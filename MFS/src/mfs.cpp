@@ -93,9 +93,6 @@ void signalEvtHdlr (signalEvent evt) {
 
 
 int main() {
-    std::cout << "test" << std::endl;
-    FFS::iotest();
-
     auto testMode = FFS::Mode{"test"};
     auto modes = std::make_tuple(testMode);
 
