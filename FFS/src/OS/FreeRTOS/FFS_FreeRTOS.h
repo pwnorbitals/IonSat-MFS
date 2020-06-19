@@ -7,6 +7,10 @@
 #include "FreeRTOS/Source/include/semphr.h"
 
 namespace FFS {
+    
+    struct OSSettings {
+        
+    };
 
     class Task {
 

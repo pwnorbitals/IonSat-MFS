@@ -93,6 +93,9 @@ void signalEvtHdlr (signalEvent evt) {
 
 
 int main() {
+    
+    FFS::OSSettings settings{};
+    
     auto testMode = FFS::Mode{"test"};
     auto modes = std::make_tuple(testMode);
 
@@ -104,7 +107,7 @@ int main() {
     // For non-static member function :
     // std::bind(&module3::print, &m3, std::placeholders::_1)
 
-    auto controller = FFS::Controller{modes, chans};
+    auto controller = FFS::Controller{settings, modes, chans};
     auto testModule = ConsoleModule{controller};
 
     controller.emit(consoleEvent{"testConsoleEventPleaseWork"});

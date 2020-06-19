@@ -5,9 +5,11 @@
 #include <tuple>
 #include <memory>
 #include <ctime>
+#include <type_traits>
 
 #include "mode/mode.h"
 #include "module/module.h"
+#include "OS/OS.h"
 #include "FFS.h"
 
 namespace FFS {
@@ -35,7 +37,7 @@ namespace FFS {
 
             template<typename inmsg_t>
             constexpr void emit(const inmsg_t& m) {
-                if constexpr(std::is_same_v<message_t, inmsg_t>) {
+                if constexpr (std::is_same_v<message_t, inmsg_t>) {
                     std::apply([m](auto... receiver){(receiver(m),...);},receivers);
                 }
             }
@@ -54,12 +56,13 @@ namespace FFS {
     template<typename ...chans_t>
     class Controller {
         protected:
+            OSSettings settings;
             std::tuple<Chan<chans_t>...> channels;
             std::tuple<std::unique_ptr<FFS::Module>> modules;
             std::tuple<FFS::Mode> modes;
 
         public:
-            Controller(std::tuple<FFS::Mode> _modes, std::tuple<Chan<chans_t>...> _channels) : channels{_channels}, modules{}, modes{_modes} { };
+            Controller(OSSettings _settings, std::tuple<FFS::Mode> _modes, std::tuple<Chan<chans_t>...> _channels) : settings{_settings}, channels{_channels}, modules{}, modes{_modes} { };
             virtual ~Controller() {};
             
             template<typename chan_t> void emit (chan_t message) const {
