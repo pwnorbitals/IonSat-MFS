@@ -34,3 +34,5 @@
 # Custom
 build/
 subprojects/
+build*/
+.kdev4/
