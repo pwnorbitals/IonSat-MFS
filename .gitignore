@@ -35,4 +35,4 @@
 build/
 subprojects/
 build*/
-.kdev4/
+.kdev4/*
