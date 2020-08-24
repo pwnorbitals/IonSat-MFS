@@ -1,2 +1,36 @@
+[Buildset]
+BuildItems=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x01\x00\x00\x00\x0b\x00\x00\x00\x00\x01\x00\x00\x00\x14\x00I\x00o\x00n\x00S\x00a\x00t\x00-\x00F\x00S\x00W)
+
+[Launch]
+Launch Configurations=Launch Configuration 0
+
+[Launch][Launch Configuration 0]
+Configured Launch Modes=execute
+Configured Launchers=nativeAppLauncher
+Name=MFS
+Type=Native Application
+
+[Launch][Launch Configuration 0][Data]
+Arguments=
+Dependencies=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x00)
+Dependency Action=Build
+EnvironmentGroup=
+Executable=file:///home/ubuntu/IonSat-FSW
+External Terminal=konsole --noclose --workdir %workdir -e %exe
+Project Target=IonSat-FSW,src,MFS,MFS
+Use External Terminal=false
+Working Directory=
+isExecutable=false
+
+[MesonManager]
+Current Build Directory Index=0
+Number of Build Directories=1
+
+[MesonManager][BuildDir 0]
+Additional meson arguments=
+Build Directory Path=/home/ubuntu/IonSat-FSW/build
+Meson Generator Backend=ninja
+Meson executable=/usr/bin/meson
+
 [Project]
 VersionControlSupport=kdevgit

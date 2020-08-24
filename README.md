@@ -1,2 +1,5 @@
-# IonSat-FSW
-IonSat Flight Software 
+# IonSat-MFS
+
+IonSat Master Flight Software
+
+
