@@ -3,7 +3,7 @@ source_files = []
 incdir = []
 deps = []
 
-RFF = subproject('IonSat-RFF')
+RFF = subproject('RFF')
 deps += RFF.get_variable('rff_dep')
 
 cmake = import('cmake')
