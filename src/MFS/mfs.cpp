@@ -1,120 +1,56 @@
 #include <iostream>
+#include <ctime>
 #include <thread>
-#include <functional>
-#include <queue>
-#include <string>
-#include <csignal>
 
-#include "FFS.h"
+#include "RFF.h"
+#include "SGP4.h"
 
 
-struct consoleEvent {
-    std::string msg;
-};
+struct TimerEvent{ std::clock_t emissionTime; };
+struct RequirePropagate{ };
 
-struct signalEvent {
-    int signal;
-};
+void propagator(RequirePropagate const& propagation) {
+    std::cout << "Initializing propagator" << std::endl;
+    auto tle = Tle{"ISS (ZARYA)", "1 25544U 98067A   20237.19927083  .00000402  00000-0  15362-4 0  9990", "2 25544  51.6471  11.8824 0001577  59.0436 306.4808 15.49181383242568"};
+    auto end = tle.Epoch().AddHours(6);
+    SGP4 sgp4(tle);
+    auto start = std::chrono::high_resolution_clock::now();
 
+    std::cout << "Starting propagation" << std::endl;
+    auto calculated_pos = sgp4.FindPosition(end);
+    std::cout << calculated_pos.ToGeodetic() << std::endl;
 
-// From : https://stackoverflow.com/questions/2721421
-template<typename T>
-class Queue {
-   public:
-      void Push ( T x ) {
-          theQueue.push( x );
-          std::cout << "push" << std::endl;
-          for (auto c : theCallBacks) { std::cout << "call" << std::endl; c(*this);  }
-      }
-      T Pop() { auto data = T{theQueue.front()}; theQueue.pop(); return data; }
-      void Register( std::function<void(Queue<T>&)> ql ) { std::cout << "registering" << std::endl; theCallBacks.push_back( ql ); }
+    auto duration = std::chrono::duration<double, std::milli>{std::chrono::high_resolution_clock::now() - start};
+    std::cout << "Propagation time : " << duration.count()/1000 << std::endl;
 
-  private:
-    std::queue <T> theQueue;
-    std::vector<std::function<void(Queue<T>&)>> theCallBacks;
-
-};
-
-void cinFct(Queue<std::string>& recvQ, Queue<std::string>& sendQ) {
-    std::cout << "thread start" << std::endl;
-    auto go = true;
-    std::cout << "registering thread stop callback" << std::endl;
-    recvQ.Register([&go](Queue<std::string>& q) { if(q.Pop() == "stop") { go = false; }});
-
-    std::this_thread::sleep_for(std::chrono::seconds{5});
-    sendQ.Push("test1");
-    std::this_thread::sleep_for(std::chrono::seconds{5});
-    sendQ.Push("test2");
-    std::this_thread::sleep_for(std::chrono::seconds{5});
-    sendQ.Push("test3");
 
 }
 
-
-template<typename ctrlr_t>
-class ConsoleModule{
-
-        ctrlr_t& FFS;
-        Queue<std::string> sendQ;
-        Queue<std::string> recvQ;
-        std::thread cinThread; // Simulates execution on external hardware
-
-        public:
-            void recvData(Queue<std::string>& q) {
-                auto recvd = q.Pop();
-                std::cout << "RECEIVED FROM THREAD : " << recvd << std::endl;
-                FFS.emit(consoleEvent{recvd});
-            }
-
-            void sendData(Queue<std::string>& q, std::string s)  { q.Push(s); }
-
-            ConsoleModule(ctrlr_t& _FFS) : FFS{_FFS}, sendQ{}, recvQ{} {
-                std::cout << "initializing module" << std::endl;
-                std::thread t([this]() { cinFct(recvQ, sendQ); });
-                cinThread = std::move(t);
-                std::cout << "registering data callback" << std::endl;
-
-                // Both work :
-                recvQ.Register([this](Queue<std::string>& q) -> void {this->recvData(q);});
-                // recvQ.Register(std::bind(&ConsoleModule::recvData, this, std::placeholders::_1));
-            }
-
-            ~ConsoleModule() { sendQ.Push("stop"); cinThread.join(); }
-};
-
-void consoleEvtHdlr (consoleEvent evt) {
-    std::cout << "CONSOLE EVENT RECEIVED : " << evt.msg << std::endl;
-}
-
-void signalEvtHdlr (signalEvent evt) {
-    std::cout << "SIGNAL EVENT RECEIVED : " << evt.signal << std::endl;
-}
-
-
-
-int main() {
+void timerHandler(TimerEvent const& evt) {
     
-    FFS::OSSettings settings{};
-    
-    auto testMode = FFS::Mode{"test"};
-    auto modes = std::make_tuple(testMode);
-
-
-    auto consoleChan = FFS::make_chan<consoleEvent>(consoleEvtHdlr);
-    auto signalChan = FFS::make_chan<signalEvent>(signalEvtHdlr);
-    auto chans = std::make_tuple(consoleChan, signalChan);
-
-    // For non-static member function :
-    // std::bind(&module3::print, &m3, std::placeholders::_1)
-
-    auto controller = FFS::Controller{settings, modes, chans};
-    auto testModule = ConsoleModule{controller};
-
-    controller.emit(consoleEvent{"testConsoleEventPleaseWork"});
-
-    std::signal(SIGINT, [](int signum) -> void {  std::exit(0); });
-
-    controller.start();
-
-    return 0;
+    RFF::emit(RequirePropagate{});
 }
+
+void timer_15sec(void*) {
+    auto start = std::chrono::high_resolution_clock::now();
+    while(1) {
+        RFF::Task<1, 2048>::delay(100);
+        auto now = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration<double, std::milli>{now-start};
+        std::cout << duration.count() << std::endl;
+        if(duration.count() >= 15000) {
+            RFF::emit(TimerEvent{std::clock()});
+            start = std::chrono::high_resolution_clock::now(); // Reset the clock
+        }
+    }
+}
+
+RFF::Task<9, 2048> timerTask{timer_15sec, "TimerTask"};
+
+RFF::EventHandler<TimerEvent, 2> PropagatorTimer{timerHandler};
+RFF::EventHandler<RequirePropagate> Propagator{propagator};
+RFF::Module PropagationModule{PropagatorTimer, Propagator};
+
+RFF::Setup setup{PropagationModule};
+
+void rff_main() {}

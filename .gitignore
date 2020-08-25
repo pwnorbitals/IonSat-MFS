@@ -33,3 +33,8 @@
 
 # Custom
 build/.kdev4/
+build/
+subprojects/
+build*/
+.kdev4/*
+.kdev4
