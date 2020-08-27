@@ -5,21 +5,26 @@ startup_code = meson.get_cross_property('startup_code', '')
 cross_folder = meson.get_cross_property('cross_folder', '')
 has_meson_build = meson.get_cross_property('has_meson_build', '')
 
+cross_source_files = []
+cross_deps = []
+cross_includes = []
+
+
 if cross_folder != ''
     
-    link_args += '-Lcross-compile/'+cross_folder+'/'
-    incdir += include_directories(cross_folder)   
+    add_global_link_arguments('-Lcross-compile/'+cross_folder+'/', language: ['c', 'cpp'])
+    cross_includes += include_directories(cross_folder)   
     
     
     if linker_script != ''
-        link_args += '-T'+meson.source_root()+'/cross-compile/'+cross_folder+'/'+linker_script
+        add_global_link_arguments('-T'+meson.source_root()+'/cross-compile/'+cross_folder+'/'+linker_script, language: ['c', 'cpp'])
         foreach ld : linker_depend
-            link_args += '-L'+meson.source_root()+'/cross-compile/'+cross_folder
+            add_global_link_arguments('-L'+meson.source_root()+'/cross-compile/'+cross_folder, language: ['c', 'cpp'])
         endforeach
     endif
 
     if startup_code != ''
-        source_files += files(cross_folder+'/'+startup_code)
+        cross_source_files += files(cross_folder+'/'+startup_code)
     endif
     
     foreach ld : linker_depend

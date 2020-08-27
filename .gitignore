@@ -32,9 +32,9 @@
 *.app
 
 # Custom
-build/
-build*/
+build/*
+build*/*
 .kdev4/*
-.kdev4
+.vscode/*
 subprojects/*
 !subprojects/*.wrap
