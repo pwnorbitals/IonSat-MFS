@@ -14,8 +14,8 @@ add_project_arguments('-DTHROW=', language: ['cpp']) # For SGP4 exception handli
 SGP4 = subproject('SGP4')
 deps += SGP4.get_variable('sgp4_dep')
 
-libcsp = subproject('libcsp')
-deps += libcsp.get_variable('libcsp_dep')
+#libcsp = subproject('libcsp')
+#deps += libcsp.get_variable('libcsp_dep')
 
 subdir('src')
 
