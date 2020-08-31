@@ -12,4 +12,5 @@ executable('MFS', source_files, include_directories : incdir,  dependencies : de
 
 if meson.is_cross_build()
     executable('print_test', [files('print_test.cpp'), cross_source_files], include_directories : incdir,  dependencies : deps)
+    executable('blink_test', [files('blink_test.cpp'), cross_source_files], include_directories : incdir,  dependencies : deps)
 endif
