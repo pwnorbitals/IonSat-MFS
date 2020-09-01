@@ -2,16 +2,25 @@
 
 #include "MFS.h"
 
-#define LOGMSG(msg) (RFF::emit(HouseKeepingEvent{msg, 0, {__FILE__"(in "__func__", line "__LINE__}}))
+#define LOGMSG(msg) \
+    (RFF::emit( \
+        MFS::HouseKeeping::Event{\
+            .message = (msg), \
+            .timestamp = 0,   \
+            .meta = {__FILE__ "(in " __func__ ", line " __LINE__ ")"} \
+        }\
+    ))
 
 
-struct HouseKeepingEvent{
-    std::string_view message;
-    unsigned int timestamp;
-    std::string_view meta;
-};
+namespace MFS::HouseKeeping {
+    struct Event{
+        std::string_view message;
+        unsigned int timestamp;
+        std::string_view meta;
+    };
 
 
-extern void (*logger)(HouseKeepingEvent const&);
-RFF::EventHandler<HouseKeepingEvent> HouseKeepingLogger{logger}
-RFF::Module HouseKeepingModule{HouseKeepingLogger};
+    void loggerFunction(MFS::HouseKeeping::Event const& event);
+    RFF::EventHandler<MFS::HouseKeeping::Event> loggerHandler{loggerFunction};
+    RFF::Module module{loggerHandler};
+}

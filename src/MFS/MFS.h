@@ -8,8 +8,8 @@
 
 namespace MFS {
     RFF::Setup setup{
-        HouseKeepingModule, 
-        PropagationModule
+        MFS::HouseKeeping::module, 
+        MFS::Propagation::module
     };
 }
 
