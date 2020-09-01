@@ -1,17 +1,15 @@
-#include <iostream>
-
+#pragma once
 #include "RFF.h"
-
 
 #include "propagation/propagation.h"
 #include "subsystems/subsystems.h"
 #include "housekeeping/housekeeping.h"
 #include "modes/modes.h"
 
-
-RFF::Setup setup{
-    HouseKeepingModule, 
-    PropagationModule
+namespace MFS {
+    RFF::Setup setup{
+        HouseKeepingModule, 
+        PropagationModule
     };
+}
 
-void rff_main() {}

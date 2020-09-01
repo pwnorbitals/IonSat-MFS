@@ -1,6 +1,7 @@
 #pragma once
 
-#include "RFF.h"
+#include "MFS.h"
+#include "SGP4.h"
 
 struct TimerEvent{ std::clock_t emissionTime; };
 struct RequirePropagate{ };
@@ -18,7 +19,7 @@ void propagator(RequirePropagate const& propagation) {
     std::cout << calculated_pos.ToGeodetic() << std::endl;
 
     auto end =  RFF::getTickCount();
-    LOGMSG("Propagation time : " << (end-start)/configTICK_RATE_HZ);
+    LOGMSG("Propagation time : " + (end-start)/configTICK_RATE_HZ);
 
 
 }
