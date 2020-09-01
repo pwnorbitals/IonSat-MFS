@@ -2,12 +2,13 @@
 
 #include "MFS.h"
 
+
 #define LOGMSG(msg)                \
-    RFF::emit(                    \
+    RFF::emit(                     \
         MFS::HouseKeeping::Event{  \
-            .message = (msg),      \
-            .timestamp = 0,        \
-            .meta = __FILE__ "(in " __func__ ", line " __LINE__ ")" \
+            (msg),                 \
+            0,                     \
+            "__FILE__ (in  __func__ , line __LINE__ )" \
         }                          \
     )
 

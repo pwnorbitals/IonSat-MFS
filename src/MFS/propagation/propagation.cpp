@@ -1,6 +1,7 @@
 #include "MFS.h"
 
 namespace MFS::Propagation {
+    
     void propagator(RequirePropagate const& propagation) {
         LOGMSG("Initializing propagator");
         auto start = RFF::getTickCount();
