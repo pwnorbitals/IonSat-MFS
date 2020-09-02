@@ -1,5 +1,3 @@
-source_files = []
-source_files += 'mfs.cpp'
 includes = []
 includes += incdir
 
@@ -10,6 +8,6 @@ if meson.is_cross_build()
 endif
 
 if meson.is_cross_build()
-    executable('print_test', [files('print_test.cpp'), cross_source_files], include_directories : incdir,  dependencies : deps)
-    executable('blink_test', [files('blink_test.cpp'), cross_source_files], include_directories : incdir,  dependencies : deps)
+    executable('print_test', [files('print_test.cpp'), cross_source_files], include_directories : includes,  dependencies : deps)
+    executable('blink_test', [files('blink_test.cpp'), cross_source_files], include_directories : includes,  dependencies : deps)
 endif

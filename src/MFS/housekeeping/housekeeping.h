@@ -22,6 +22,6 @@ namespace MFS::HouseKeeping {
 
 
     void loggerFunction(MFS::HouseKeeping::Event const& event);
-    RFF::EventHandler<MFS::HouseKeeping::Event> loggerHandler{loggerFunction};
-    RFF::Module module{loggerHandler};
+    extern RFF::EventHandler<MFS::HouseKeeping::Event> loggerHandler;
+    extern RFF::Module module;
 }

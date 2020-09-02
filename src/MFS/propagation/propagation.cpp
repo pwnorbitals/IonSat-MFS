@@ -1,8 +1,14 @@
 #include "MFS.h"
 
 namespace MFS::Propagation {
+
+    RFF::Task<9, 2048> timerTask{timer_15sec, "TimerTask"};
+
+    RFF::EventHandler<TimerEvent, 2> PropagatorTimer{timerHandler};
+    RFF::EventHandler<RequirePropagate> propagator{propagatorFct};
+    RFF::Module module{PropagatorTimer, propagator};
     
-    void propagator(RequirePropagate const& propagation) {
+    void propagatorFct(RequirePropagate const& propagation) {
         LOGMSG("Initializing propagator");
         auto start = RFF::getTickCount();
 

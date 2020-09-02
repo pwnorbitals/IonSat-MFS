@@ -1,1 +1,2 @@
+subdir('tests')
 subdir('MFS')

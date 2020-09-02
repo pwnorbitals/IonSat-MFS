@@ -8,13 +8,13 @@ namespace MFS::Propagation {
     struct TimerEvent{ std::clock_t emissionTime; };
     struct RequirePropagate{ };
 
-    void propagator(RequirePropagate const& propagation);
+    void propagatorFct(RequirePropagate const& propagation);
     void timerHandler(TimerEvent const& evt);
     void timer_15sec(void*);
 
-    RFF::Task<9, 2048> timerTask{timer_15sec, "TimerTask"};
+    extern RFF::Task<9, 2048> timerTask;
 
-    RFF::EventHandler<TimerEvent, 2> PropagatorTimer{timerHandler};
-    RFF::EventHandler<RequirePropagate> Propagator{propagator};
-    RFF::Module module{PropagatorTimer, Propagator};
+    extern RFF::EventHandler<TimerEvent, 2> PropagatorTimer;
+    extern RFF::EventHandler<RequirePropagate> propagator;
+    extern RFF::Module module;
 }
