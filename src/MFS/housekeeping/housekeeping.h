@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MFS.h"
+#include <string_view>
 
 
 #define LOGMSG(msg)                \
@@ -22,6 +23,6 @@ namespace MFS::HouseKeeping {
 
 
     void loggerFunction(MFS::HouseKeeping::Event const& event);
-    extern RFF::EventHandler<MFS::HouseKeeping::Event> loggerHandler;
-    extern RFF::Module module;
+    inline auto loggerHandler = RFF::EventHandler<MFS::HouseKeeping::Event>{loggerFunction};
+    inline auto module = RFF::Module{loggerHandler};
 }

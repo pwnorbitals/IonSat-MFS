@@ -2,11 +2,9 @@
 
 namespace MFS::Propagation {
 
-    RFF::Task<9, 2048> timerTask{timer_15sec, "TimerTask"};
+    
 
-    RFF::EventHandler<TimerEvent, 2> PropagatorTimer{timerHandler};
-    RFF::EventHandler<RequirePropagate> propagator{propagatorFct};
-    RFF::Module module{PropagatorTimer, propagator};
+    
     
     void propagatorFct(RequirePropagate const& propagation) {
         LOGMSG("Initializing propagator");
@@ -33,7 +31,7 @@ namespace MFS::Propagation {
     void timer_15sec(void*) {
         while(1) {
             
-            RFF::emit(TimerEvent{std::clock()});
+            RFF::emit(TimerEvent{RFF::getTickCount()});
 
             for(unsigned int cur = 0; cur < 15; cur++) {
                 RFF::delay(1000);
