@@ -7,7 +7,7 @@
 
 namespace MFS::Subsystems::Thruster {
 
-    auto dutyTime = std::map<int, int>{
+    inline auto dutyTime = std::map<int, int>{
         {240, 26},
         {250, 20},
         {260, 16},
@@ -18,7 +18,7 @@ namespace MFS::Subsystems::Thruster {
         {600, 0}
     };
 
-    auto interpolate = [](std::map<int, int> const& table, int value_x) -> double {
+    inline auto interpolate = [](std::map<int, int> const& table, int value_x) -> double {
         // O(n), can be optimized by using a sorted set
 
         int higher_x = INT_MAX;
@@ -48,6 +48,6 @@ namespace MFS::Subsystems::Thruster {
 
     
 
-    auto altitude = 275;
-    auto currentDutyTime = interpolate(dutyTime, altitude);
+    inline auto altitude = 275;
+    inline auto currentDutyTime = interpolate(dutyTime, altitude);
 }

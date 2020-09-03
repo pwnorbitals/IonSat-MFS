@@ -1,42 +1,60 @@
 #include "MFS.h"
 
+namespace MFS::Modes {
+    void switchMode(MFS::Modes::modeList newMode) {
+        auto currentElement = actions.find(currentMode);
+        assert(currentElement != actions.end());
+
+        auto exitAction = std::get<1>(currentElement->second);
+        exitAction();
+
+        auto newElement = actions.find(newMode);
+        assert(newElement != actions.end());
+
+        auto enterAction = std::get<0>(newElement->second);
+        enterAction();
+
+        currentMode = newMode;
+
+    }
+}
 namespace MFS::Modes::Actions {
     void enterNominal() {
-        LOGMSG("Entering nominal mode");
+        LOG("Entering nominal mode");
     }
 
 
     void exitNominal() {
-        LOGMSG("Exiting nominal mode");
+        LOG("Exiting nominal mode");
     }
 
 
     void enterTransmission() {
-        LOGMSG("Entering transmission mode");
+        LOG("Entering transmission mode");
     }
 
 
     void exitTransmission() {
-        LOGMSG("Exiting transmission mode");
+        LOG("Exiting transmission mode");
     }
 
 
     void enterThrust() {
-        LOGMSG("Entering thrust mode");
+        LOG("Entering thrust mode");
     }
 
 
     void exitThrust() {
-        LOGMSG("Exiting thrust mode");
+        LOG("Exiting thrust mode");
     }
 
 
     void enterSurvival() {
-        LOGMSG("Entering survival mode");
+        LOG("Entering survival mode");
     }
 
 
     void exitSurvival() {
-        LOGMSG("Exiting survival mode");
+        LOG("Exiting survival mode");
     }
 }

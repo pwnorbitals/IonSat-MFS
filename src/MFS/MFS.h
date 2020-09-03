@@ -7,7 +7,7 @@
 #include "modes/modes.h"
 
 namespace MFS {
-    RFF::Setup setup{
+    inline auto setup = RFF::Setup{
         MFS::HouseKeeping::module, 
         MFS::Propagation::module
     };
