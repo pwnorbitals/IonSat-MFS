@@ -1,1 +1,1 @@
-source_files += files('thruster.cpp')
+source_files += files('thruster.cpp', 'propagation/propagation.cpp')

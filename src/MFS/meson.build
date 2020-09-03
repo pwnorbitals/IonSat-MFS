@@ -3,7 +3,6 @@ source_files = files()
 subdir('flightPlan')
 subdir('housekeeping')
 subdir('modes')
-subdir('propagation')
 subdir('subsystems')
 subdir('watchdog')
 
