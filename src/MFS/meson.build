@@ -5,6 +5,7 @@ subdir('housekeeping')
 subdir('modes')
 subdir('propagation')
 subdir('subsystems')
+subdir('watchdog')
 
 
 source_files += 'MFS.cpp'

@@ -3,19 +3,19 @@
 #include "MFS.h"
 
 
-#define LOG(msg)                \
+#define LOG(...)                \
     RFF::emit(                      \
         MFS::HouseKeeping::Event{  \
-            (msg),                 \
+            (__VA_ARGS__),                 \
             0,                     \
             "__FILE__ (in  __func__ , line __LINE__ )" \
         }                          \
     )
 
 
-#define EMIT(value)             \
-    LOG("Event : " (value)); \
-    RFF::emit(value);           
+#define EMIT(...)             \
+    LOG("Event :  (value)"); \
+    RFF::emit(__VA_ARGS__);           
 
 
 namespace MFS::HouseKeeping {
