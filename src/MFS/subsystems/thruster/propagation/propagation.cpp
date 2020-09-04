@@ -1,8 +1,12 @@
 #include "MFS.h"
 
 namespace MFS::Propagation {
+
     
-    void propagator(RequirePropagate const& propagation) {
+
+    
+    
+    void propagatorFct(RequirePropagate const& propagation) {
         LOG("Initializing propagator");
         auto start = RFF::getTickCount();
 
@@ -27,7 +31,7 @@ namespace MFS::Propagation {
     void timer_15sec(void*) {
         while(1) {
             
-            RFF::emit(TimerEvent{std::clock()});
+            RFF::emit(TimerEvent{RFF::getTickCount()});
 
             for(unsigned int cur = 0; cur < 15; cur++) {
                 RFF::delay(1000);

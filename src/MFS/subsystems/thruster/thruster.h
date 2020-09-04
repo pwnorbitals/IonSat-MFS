@@ -1,5 +1,7 @@
 #pragma once
 
+#include "propagation/propagation.h"
+
 #include <tuple>
 #include <map>
 #include <climits>

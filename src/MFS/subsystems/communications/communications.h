@@ -98,7 +98,7 @@ namespace MFS::Subsystems::Communications {
 
         struct UpdateBlob {
 
-        }
+        };
 
     }
 
