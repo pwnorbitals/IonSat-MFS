@@ -112,26 +112,6 @@ namespace MFS::Subsystems::Communications {
 
     }
 
-    
-
-    namespace Events {
-        struct TCReceived {
-
-        };
-
-        void do_TCReceived(TCReceived const&);
-
-        struct SendTM {
-
-        };
-
-        void do_SendTM(SendTM const&);
-
-        inline auto TCHandler = RFF::EventHandler<TCReceived>{do_TCReceived};
-        inline auto TMHandler = RFF::EventHandler<SendTM>{do_SendTM};
-
-        inline auto module = RFF::Module{TCHandler, TMHandler}; 
-    }
 
     namespace TC {
         template<typename data_t>
@@ -150,8 +130,6 @@ namespace MFS::Subsystems::Communications {
     
     namespace TM {
 
-        
-
         template<typename data_t>
         struct BufferToSend {
             data_t data;
@@ -165,6 +143,22 @@ namespace MFS::Subsystems::Communications {
         template<typename data_t>
         void TM_Encode(BufferToSend<data_t> const&);
 
+    }
+
+    namespace Events {
+
+        template<typename data_t>
+        void do_TCReceived(TC::BufferReceived<data_t> const&);
+
+        template<typename data_t>
+        void do_SendTM(TM::BufferToSend<data_t> const&);
+
+
+
+        inline auto TCHandler = RFF::EventHandler<TC::BufferReceived<char[256]>>{do_TCReceived<char[256]>};
+        inline auto TMHandler = RFF::EventHandler<TM::BufferToSend<char[256]>>{do_SendTM<char[256]>};
+
+        inline auto module = RFF::Module{TCHandler, TMHandler}; 
     }
     
     inline auto& module = Events::module;

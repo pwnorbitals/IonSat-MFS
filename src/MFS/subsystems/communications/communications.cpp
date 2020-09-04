@@ -17,12 +17,14 @@ namespace MFS::Subsystems::Communications {
     }
 
     namespace Events {
-        void do_TCReceived(TCReceived const&) {
+        template<typename data_t>
+        void do_TCReceived(TC::BufferReceived<data_t> const&) {
 
         }
 
-        void do_SendTM(SendTM const&) {
-            
+        template<typename data_t>
+        void do_SendTM(TM::BufferToSend<data_t> const&) {
+
         }
     }
 
