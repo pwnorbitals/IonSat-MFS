@@ -17,6 +17,8 @@ deps += SGP4.get_variable('sgp4_dep')
 #libcsp = subproject('libcsp')
 #deps += libcsp.get_variable('libcsp_dep')
 
+deps += dependency('boost')
+
 subdir('src')
 
 

@@ -1,5 +1,10 @@
 #pragma once
 
+#include "MFS.h"
+#include "subsystems/communications/communications.h"
+
+#include <boost/container/static_vector.hpp>
+
 namespace MFS::FlightPlan {
 
     struct timeTrigger {
@@ -21,19 +26,32 @@ namespace MFS::FlightPlan {
 
 
 
-    template<typename event_t, typename trigger_t>
+    template<typename event_t>
     struct FlightEvent {
-        trigger_t trigger;
+        timeTrigger trigger;
         event_t   action;
         eventStatus status;
     };
 
-    template<typename ...flightEvents_t>
+    struct NewFlightEvent {
+        MFS::Subsystems::Communications::TCList event;
+    };
+
+    struct FlightEventTrigger {
+        
+    };
+
+    // Should be Singleton
+    // Delete after a given time
     struct FlightPlan {
-        std::tuple<flightEvents_t...> events;
+        boost::container::static_vector<FlightEvent<int>, 512> events;
     };  
 
-    void deserialize();
-    void serialize();
+    void addFlightEvent(NewFlightEvent const&); // Setup a wake-up timer
+    void FlightEventTriggered(FlightEventTrigger const&);
+    inline auto FlightEventHandler = RFF::EventHandler<NewFlightEvent>{addFlightEvent};
+    inline auto EventTriggerHandler = RFF::EventHandler<FlightEventTrigger>{FlightEventTriggered};
+    inline auto FlightPlanModule = RFF::Module{FlightEventHandler, EventTriggerHandler};
+
 
 }

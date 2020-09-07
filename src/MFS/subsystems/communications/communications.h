@@ -1,5 +1,8 @@
 #pragma once
 
+#include "MFS.h"
+#include "flightPlan/flightPlan.h"
+
 namespace MFS::Subsystems::Communications {
 
     enum class TCList {
@@ -42,63 +45,62 @@ namespace MFS::Subsystems::Communications {
         SEND_LOGS,         // Param : subsystem
         LOGS_CONFIG,         // Param: key, value, force
 
-
-
     };
 
     namespace Commands {
-        struct Reboot {
-            unsigned int execTime; // 0 = NOW
-        }; // 
-
-        struct SendHousekeeping{
-
-        };
-
-        struct SendOBCLogs {
-
-        };
-        
-        struct SendADCSLogs {
-
-        };
-
-        struct SendCommLogs {
-
-        };
-
-        struct SendEPSLogs {
+        template<TCList T>
+        struct Command {
             
         };
 
-        struct ADCSChangeMode {
+        template<>
+        struct Command<TCList::ADCS_CHANGEMODE> {
+            MFS::FlightPlan::timeTrigger trigger;
+        };
+
+        template<>
+        struct Command<TCList::REBOOT> {
             unsigned int execTime; // 0 = NOW
+        }; // 
 
-        }; // FlightPlan.add
+        template<>
+        struct Command<TCList::SEND_HOUSEKEEPING>{
 
-        struct ListEvents {
+        };
 
+        template<>
+        struct Command<TCList::SEND_LOGS> {
+            MFS::Subsystems::Subsystem target;
+        };
+        
+        template<>
+        struct Command<TCList::LIST_EVENTS> {
+            
         }; // Answer with event type + time + status
 
-        struct CancelEvent {
+        template<>
+        struct Command<TCList::CANCEL_EVENT> {
             unsigned int eventId;
         }; // FlightPlan.cancel
 
-        struct TimeSync {
-            unsigned int execTime; // 0 = NOW
+        template<>
+        struct Command<TCList::SYNC_TIME> {
+            MFS::FlightPlan::timeTrigger executionTime;
             unsigned int frequency; // 0 = NEVER, otherwise overwrite other TimeSync events
 
         };
 
-        struct OCSChangeAltitude {
+        template<>
+        struct Command<TCList::OCS_CHANGEALTITUDE> {
             unsigned int target;
             unsigned int min; // 0 = undefined
             unsigned int max; // 0 = undefined
         };
 
-        struct UpdateBlob {
+        template<>
+        struct Command<TCList::UPDATE_BLOB> {
 
-        }
+        };
 
     }
 
