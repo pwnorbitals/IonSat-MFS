@@ -20,7 +20,7 @@
 
 
 namespace MFS::HouseKeeping {
-    struct Event{
+    struct Event{ // TODO : fix 
         std::string_view message;
         unsigned int timestamp;
         std::string_view meta;

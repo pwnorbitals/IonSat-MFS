@@ -18,6 +18,6 @@ deps += SGP4.get_variable('sgp4_dep')
 #deps += libcsp.get_variable('libcsp_dep')
 
 subdir('src')
-
+# subdir('test')
 
 

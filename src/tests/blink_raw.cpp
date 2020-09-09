@@ -24,6 +24,8 @@
 
 static void gpio_setup(void)
 {
+	rcc_clock_setup_pll(&rcc_hse_8mhz_3v3[RCC_CLOCK_3V3_168MHZ]);
+	
 	/* Enable GPIOD clock. */
 	/* Manually: */
 	/* RCC_AHB1ENR |= RCC_AHB1ENR_IOPGEN; */
@@ -40,42 +42,17 @@ static void gpio_setup(void)
 
 int main(void)
 {
-	int i;
 
 	gpio_setup();
-
-	/* Blink the LED (PG13) on the board. */
+	
 	while (1) {
-		/* Manually: */
-#if 0
-		GPIOG_BSRR = GPIO13;		/* LED off */
-		for (i = 0; i < 1000000; i++) {	/* Wait a bit. */
-			__asm__("nop");
-		}
-		GPIOG_BRR = GPIO13;		/* LED on */
-		for (i = 0; i < 1000000; i++) {	/* Wait a bit. */
-			__asm__("nop");
-		}
-#endif
-
-		/* Using API functions gpio_set()/gpio_clear(): */
-#if 0
-		gpio_set(GPIOG, GPIO13);	/* LED off */
-		for (i = 0; i < 1000000; i++) {	/* Wait a bit. */
-			__asm__("nop");
-		}
-		gpio_clear(GPIOG, GPIO13);	/* LED on */
-		for (i = 0; i < 1000000; i++) {	/* Wait a bit. */
-			__asm__("nop");
-		}
-#endif
-
 		/* Using API function gpio_toggle(): */
 		gpio_toggle(GPIOG, GPIO13);	/* LED on/off */
-		for (i = 0; i < 1000000; i++) {	/* Wait a bit. */
+		for (unsigned int i = 0; i < 1000000; i++) {	/* Wait a bit. */
 			__asm__("nop");
 		}
 	}
+	
 
 	return 0;
 }

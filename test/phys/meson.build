@@ -1,1 +1,1 @@
-test_files = ['blink.cpp', 'example0.cpp']
+test_files = ['blink.cpp', 'blink_raw.cpp', 'blink_standalone', 'example0.cpp']
